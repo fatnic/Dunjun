@@ -1,4 +1,5 @@
 #include <Dunjun/common.hpp>
+#include <GL/Glew.h>
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -8,6 +9,10 @@ static const int g_windowHeight = 600;
 
 int main()
 {
+
+	if (!glewInit())
+		return EXIT_FAILURE;
+
 	GLFWwindow* window;
 
 	if (!glfwInit())
@@ -22,6 +27,17 @@ int main()
 
 	glfwMakeContextCurrent(window);
 
+	float vertices[] = {
+		0.0f, 0.5f,
+	   -0.5f, -0.5f,
+		0.5f, -0.5f
+	};
+
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	
 	bool running = true;
 	bool fullscreen = false;
 
@@ -48,7 +64,7 @@ int main()
 			{
 				int count;
 				const GLFWvidmode* modes =  glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
-				newWindow = glfwCreateWindow(modes[count - 1].width, modes[count - 1].height, "Dunjun", glfwGetPrimaryMonitor(), window);
+				newWindow = glfwCreateWindow(modes[count-1].width, modes[count-1].height, "Dunjun", glfwGetPrimaryMonitor(), window);
 			}
 			else
 			{
